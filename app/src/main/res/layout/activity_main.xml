@@ -9,13 +9,15 @@
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+        android:elevation="4dp"
+        app:elevation="4dp">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/primary"
+            app:titleTextColor="@color/text_on_primary"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -29,16 +31,18 @@
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="8dp"
-            android:clipToPadding="false" />
+            android:padding="4dp"
+            android:clipToPadding="false"
+            android:scrollbars="vertical"
+            android:scrollbarStyle="outsideOverlay" />
 
         <ProgressBar
             android:id="@+id/progressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_gravity="center"
             android:visibility="gone"
-            android:indeterminateTint="@color/primary" />
+            android:indeterminateTint="@color/accent" />
 
         <LinearLayout
             android:id="@+id/emptyView"
@@ -47,22 +51,34 @@
             android:layout_gravity="center"
             android:orientation="vertical"
             android:gravity="center"
-            android:visibility="gone">
+            android:visibility="gone"
+            android:padding="32dp">
 
             <ImageView
                 android:layout_width="120dp"
                 android:layout_height="120dp"
                 android:src="@drawable/ic_video_placeholder"
-                android:alpha="0.3"
+                android:alpha="0.25"
+                app:tint="@color/accent_light"
                 android:contentDescription="@string/no_videos" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/no_videos_found"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:textColor="@color/text_secondary"
+                android:fontFamily="sans-serif-medium"
                 android:layout_marginTop="16dp" />
+            
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Your videos will appear here"
+                android:textSize="13sp"
+                android:textColor="@color/text_secondary"
+                android:layout_marginTop="8dp"
+                android:alpha="0.7" />
 
         </LinearLayout>
 

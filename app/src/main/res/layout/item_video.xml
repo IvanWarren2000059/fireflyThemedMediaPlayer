@@ -5,8 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="4dp"
-    app:cardCornerRadius="12dp"
+    app:cardCornerRadius="20dp"
     app:cardElevation="2dp"
+    app:strokeWidth="0dp"
     android:clickable="true"
     android:focusable="true"
     android:foreground="?attr/selectableItemBackground">
@@ -16,9 +17,10 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <!-- Thumbnail - Extra small and cute -->
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="160dp">
+            android:layout_height="80dp">
 
             <ImageView
                 android:id="@+id/videoThumbnail"
@@ -27,47 +29,62 @@
                 android:scaleType="centerCrop"
                 android:contentDescription="@string/video_thumbnail" />
 
+            <!-- Gradient overlay for better text readability -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_gravity="bottom"
+                android:background="@drawable/thumbnail_gradient" />
+
+            <!-- Duration badge with Firefly accent -->
             <TextView
                 android:id="@+id/videoDuration"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|end"
                 android:layout_margin="8dp"
-                android:background="@drawable/duration_background"
+                android:background="@drawable/duration_badge"
                 android:paddingHorizontal="8dp"
                 android:paddingVertical="4dp"
-                android:textColor="@android:color/white"
-                android:textSize="12sp"
+                android:textColor="@color/white"
+                android:textSize="11sp"
                 android:fontFamily="sans-serif-medium"
-                android:text="00:00" />
+                android:text="00:00"
+                android:elevation="2dp" />
 
         </FrameLayout>
 
+        <!-- Info section with tighter spacing -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="12dp">
+            android:padding="6dp"
+            android:background="@color/card_background">
 
+            <!-- Title -->
             <TextView
                 android:id="@+id/videoTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Video Title"
-                android:textSize="14sp"
+                android:textSize="11sp"
                 android:textColor="@color/text_primary"
                 android:fontFamily="sans-serif-medium"
-                android:maxLines="2"
-                android:ellipsize="end" />
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:lineSpacingMultiplier="1.1" />
 
+            <!-- Size with accent color -->
             <TextView
                 android:id="@+id/videoSize"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="0 MB"
-                android:textSize="12sp"
-                android:textColor="@color/text_secondary"
-                android:layout_marginTop="4dp" />
+                android:textSize="9sp"
+                android:textColor="@color/accent_dark"
+                android:fontFamily="sans-serif"
+                android:layout_marginTop="2dp" />
 
         </LinearLayout>
 

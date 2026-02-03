@@ -14,8 +14,8 @@ import android.view.WindowManager
 import android.widget.FrameLayout
 import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
@@ -26,7 +26,7 @@ import org.firefly.player.databinding.ActivityPlayerBinding
 import org.firefly.player.model.Video
 import androidx.media3.ui.PlayerView
 
-class PlayerActivity : AppCompatActivity() {
+class PlayerActivity_old : AppCompatActivity() {
 
     companion object {
         const val EXTRA_VIDEO = "extra_video"
@@ -113,32 +113,28 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     private fun setupMinimizeButton() {
-        // Create minimize button with better styling
+        // Create minimize button programmatically
         minimizeButton = ImageButton(this).apply {
-            setImageResource(R.drawable.ic_minimize)
-            setBackgroundResource(R.drawable.minimize_button_background)
-            imageTintList = ContextCompat.getColorStateList(context, R.color.white)
-            scaleType = android.widget.ImageView.ScaleType.CENTER
-            alpha = 0.9f
-            elevation = 4f
-            
-            // Size in pixels
-            val size = resources.getDimensionPixelSize(R.dimen.minimize_button_size)
-            layoutParams = FrameLayout.LayoutParams(size, size)
+            // Use a simple X or down arrow icon
+            setImageResource(android.R.drawable.ic_menu_close_clear_cancel)
+            background = null
+            alpha = 0.7f
+            scaleType = android.widget.ImageView.ScaleType.CENTER_INSIDE
             
             setOnClickListener {
+                // Exit player activity
                 finish()
             }
         }
 
         // Add to the player view overlay
         val contentFrame = binding.playerView
-        val size = resources.getDimensionPixelSize(R.dimen.minimize_button_size)
-        val margin = resources.getDimensionPixelSize(R.dimen.minimize_button_margin)
-        
-        val params = FrameLayout.LayoutParams(size, size).apply {
-            gravity = Gravity.TOP or Gravity.END
-            setMargins(0, margin, margin, 0)
+        val params = FrameLayout.LayoutParams(
+            resources.getDimensionPixelSize(android.R.dimen.app_icon_size),
+            resources.getDimensionPixelSize(android.R.dimen.app_icon_size)
+        ).apply {
+            gravity = Gravity.BOTTOM or Gravity.END
+            setMargins(0, 0, 48, 96) // Position near bottom-right, above typical controls
         }
 
         (contentFrame as FrameLayout).addView(minimizeButton, params)
@@ -199,15 +195,14 @@ class PlayerActivity : AppCompatActivity() {
             (it.parent as? FrameLayout)?.removeView(it)
         }
 
-        // Create elegant overlay with Firefly colors
+        // Create overlay programmatically
         seekOverlay = TextView(this).apply {
-            text = if (isRewind) "« 10s" else "10s »"
-            textSize = 28f
-            setTextColor(ContextCompat.getColor(context, R.color.white))
-            setBackgroundResource(R.drawable.seek_overlay_background)
-            setPadding(48, 24, 48, 24)
+            text = if (isRewind) "⏪ 10s" else "10s ⏩"
+            textSize = 32f
+            setTextColor(android.graphics.Color.WHITE)
+            setBackgroundColor(android.graphics.Color.argb(180, 0, 0, 0))
+            setPadding(60, 30, 60, 30)
             alpha = 0f
-            elevation = 8f
         }
 
         // Add to the content frame
@@ -221,37 +216,28 @@ class PlayerActivity : AppCompatActivity() {
             } else {
                 Gravity.CENTER_VERTICAL or Gravity.END
             }
-            setMargins(60, 0, 60, 0)
+            setMargins(80, 0, 80, 0)
         }
 
         contentFrame.addView(seekOverlay, params)
 
-        // Animate with bounce
+        // Animate
         seekOverlay?.animate()
             ?.alpha(1f)
-            ?.scaleX(1.1f)
-            ?.scaleY(1.1f)
-            ?.setDuration(150)
+            ?.setDuration(200)
             ?.withEndAction {
-                seekOverlay?.animate()
-                    ?.scaleX(1f)
-                    ?.scaleY(1f)
-                    ?.setDuration(100)
-                    ?.withEndAction {
-                        handler.postDelayed({
-                            seekOverlay?.animate()
-                                ?.alpha(0f)
-                                ?.setDuration(200)
-                                ?.withEndAction {
-                                    seekOverlay?.let { overlay ->
-                                        (overlay.parent as? FrameLayout)?.removeView(overlay)
-                                    }
-                                    seekOverlay = null
-                                }
-                                ?.start()
-                        }, 400)
-                    }
-                    ?.start()
+                handler.postDelayed({
+                    seekOverlay?.animate()
+                        ?.alpha(0f)
+                        ?.setDuration(200)
+                        ?.withEndAction {
+                            seekOverlay?.let { overlay ->
+                                (overlay.parent as? FrameLayout)?.removeView(overlay)
+                            }
+                            seekOverlay = null
+                        }
+                        ?.start()
+                }, 500)
             }
             ?.start()
     }
@@ -273,6 +259,7 @@ class PlayerActivity : AppCompatActivity() {
                 override fun onPlaybackStateChanged(playbackState: Int) {
                     when (playbackState) {
                         Player.STATE_ENDED -> {
+                            // Video ended
                             finish()
                         }
                         Player.STATE_READY -> {
@@ -290,7 +277,7 @@ class PlayerActivity : AppCompatActivity() {
             })
         }
 
-        // Controller auto-hide timeout
+        // Hide controller auto-hide behavior can be customized
         binding.playerView.controllerShowTimeoutMs = 3000
     }
 

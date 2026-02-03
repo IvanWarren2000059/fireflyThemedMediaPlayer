@@ -5,12 +5,9 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.RadioButton
-import android.widget.RadioGroup
 import android.widget.SearchView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -20,14 +17,13 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.button.MaterialButton
 import org.firefly.player.adapter.GroupedVideoAdapter
 import org.firefly.player.adapter.VideoAdapter
 import org.firefly.player.databinding.ActivityMainBinding
 import org.firefly.player.model.Video
 import org.firefly.player.viewmodel.VideoViewModel
 
-class MainActivity : AppCompatActivity() {
+class MainActivity_old : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var viewModel: VideoViewModel
@@ -185,11 +181,11 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_group -> {
-                showSortGroupDialog()
+                showGroupDialog()
                 true
             }
             R.id.action_order -> {
-                showSortGroupDialog()
+                showOrderDialog()
                 true
             }
             R.id.action_refresh -> {
@@ -200,78 +196,119 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun showSortGroupDialog() {
-        val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_sort_group, null)
-        
-        val groupByRadioGroup = dialogView.findViewById<RadioGroup>(R.id.groupByRadioGroup)
-        val sortByRadioGroup = dialogView.findViewById<RadioGroup>(R.id.sortByRadioGroup)
-        val btnCancel = dialogView.findViewById<MaterialButton>(R.id.btnCancel)
-        val btnApply = dialogView.findViewById<MaterialButton>(R.id.btnApply)
-        
-        // Set current selections
-        val currentGroupType = viewModel.getCurrentGroupType()
-        val currentOrder = viewModel.getCurrentGroupOrder()
-        
-        // Set group by selection
-        when (currentGroupType) {
-            VideoViewModel.GroupType.NONE -> dialogView.findViewById<RadioButton>(R.id.groupByNone).isChecked = true
-            VideoViewModel.GroupType.NAME -> dialogView.findViewById<RadioButton>(R.id.groupByFolder).isChecked = true
-            VideoViewModel.GroupType.DATE -> dialogView.findViewById<RadioButton>(R.id.groupByDate).isChecked = true
-            VideoViewModel.GroupType.SIZE -> dialogView.findViewById<RadioButton>(R.id.groupByDate).isChecked = true
-        }
-        
-        // Set sort by selection (default to Name A-Z)
-        dialogView.findViewById<RadioButton>(R.id.sortByName).isChecked = true
-        
-        val dialog = AlertDialog.Builder(this)
-            .setView(dialogView)
-            .create()
-        
-        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
-        
-        btnCancel.setOnClickListener {
-            dialog.dismiss()
-        }
-        
-        btnApply.setOnClickListener {
-            val selectedGroupId = groupByRadioGroup.checkedRadioButtonId
-            val selectedSortId = sortByRadioGroup.checkedRadioButtonId
-            
-            // Determine group type
-            val groupType = when (selectedGroupId) {
-                R.id.groupByNone -> VideoViewModel.GroupType.NONE
-                R.id.groupByFolder -> VideoViewModel.GroupType.NAME
-                R.id.groupByDate -> VideoViewModel.GroupType.DATE
-                else -> VideoViewModel.GroupType.NONE
+    private fun showGroupDialog() {
+        val options = arrayOf(
+            "No Grouping",
+            "Group by Name",
+            "Group by Date",
+            "Group by Size"
+        )
+
+        AlertDialog.Builder(this)
+            .setTitle("Group By")
+            .setItems(options) { _, which ->
+                when (which) {
+                    0 -> {
+                        // No grouping - show all videos sorted by date (newest first)
+                        isGrouped = false
+                        binding.recyclerView.layoutManager = GridLayoutManager(this, 2)
+                        binding.recyclerView.adapter = videoAdapter
+                        viewModel.groupBy(VideoViewModel.GroupType.NONE)
+                    }
+                    1 -> {
+                        // Group by Name - then ask for order
+                        showGroupOrderDialog(VideoViewModel.GroupType.NAME)
+                    }
+                    2 -> {
+                        // Group by Date - then ask for order
+                        showGroupOrderDialog(VideoViewModel.GroupType.DATE)
+                    }
+                    3 -> {
+                        // Group by Size - then ask for order
+                        showGroupOrderDialog(VideoViewModel.GroupType.SIZE)
+                    }
+                }
             }
-            
-            // Determine sort order (ascending = true)
-            val ascending = when (selectedSortId) {
-                R.id.sortByName -> true
-                R.id.sortByDate -> false  // Newest first
-                R.id.sortBySize -> false  // Largest first
-                R.id.sortByDuration -> false
-                else -> true
-            }
-            
-            // Apply grouping
-            if (groupType == VideoViewModel.GroupType.NONE) {
-                // No grouping - grid layout
-                isGrouped = false
-                binding.recyclerView.layoutManager = GridLayoutManager(this, 2)
-                binding.recyclerView.adapter = videoAdapter
-                viewModel.groupBy(VideoViewModel.GroupType.NONE)
-            } else {
-                // Grouped - linear layout
+            .show()
+    }
+
+    private fun showGroupOrderDialog(groupType: VideoViewModel.GroupType) {
+        val orderOptions = when (groupType) {
+            VideoViewModel.GroupType.NAME -> arrayOf(
+                "A-Z within each letter",
+                "Z-A within each letter"
+            )
+            VideoViewModel.GroupType.DATE -> arrayOf(
+                "Oldest first within each month",
+                "Newest first within each month"
+            )
+            VideoViewModel.GroupType.SIZE -> arrayOf(
+                "Smallest first within each range",
+                "Largest first within each range"
+            )
+            else -> arrayOf("Ascending", "Descending")
+        }
+
+        // Set default selection based on group type
+        val defaultSelection = when (groupType) {
+            VideoViewModel.GroupType.DATE -> 1  // Default to Newest first within month
+            VideoViewModel.GroupType.SIZE -> 1  // Default to Largest first within range
+            else -> 0  // Default to ascending for name
+        }
+
+        AlertDialog.Builder(this)
+            .setTitle("Sort videos within groups")
+            .setSingleChoiceItems(orderOptions, defaultSelection) { dialog, which ->
+                val ascending = which == 0
+                
+                // Switch to grouped layout
                 isGrouped = true
                 binding.recyclerView.layoutManager = LinearLayoutManager(this)
                 binding.recyclerView.adapter = groupedAdapter
+                
+                // Apply grouping with selected order
                 viewModel.groupBy(groupType, ascending)
+                dialog.dismiss()
             }
-            
-            dialog.dismiss()
+            .setNegativeButton("Cancel", null)
+            .show()
+    }
+
+    private fun showOrderDialog() {
+        val currentGroupType = viewModel.getCurrentGroupType()
+        
+        if (currentGroupType == VideoViewModel.GroupType.NONE) {
+            Toast.makeText(this, "Please select a grouping first", Toast.LENGTH_SHORT).show()
+            return
         }
         
-        dialog.show()
+        val currentOrder = viewModel.getCurrentGroupOrder()
+        val currentSelection = if (currentOrder) 0 else 1
+        
+        val orderOptions = when (currentGroupType) {
+            VideoViewModel.GroupType.NAME -> arrayOf(
+                "A-Z within each letter",
+                "Z-A within each letter"
+            )
+            VideoViewModel.GroupType.DATE -> arrayOf(
+                "Oldest first within each month",
+                "Newest first within each month"
+            )
+            VideoViewModel.GroupType.SIZE -> arrayOf(
+                "Smallest first within each range",
+                "Largest first within each range"
+            )
+            else -> arrayOf("Ascending", "Descending")
+        }
+
+        AlertDialog.Builder(this)
+            .setTitle("Change video order within groups")
+            .setSingleChoiceItems(orderOptions, currentSelection) { dialog, which ->
+                val ascending = which == 0
+                viewModel.setGroupOrder(ascending)
+                dialog.dismiss()
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
     }
 }

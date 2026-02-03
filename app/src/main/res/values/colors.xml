@@ -1,25 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Primary colors inspired by the character -->
-    <color name="primary">#4A4458</color>
-    <color name="primary_dark">#2F2838</color>
-    <color name="primary_light">#6B5D7A</color>
+    <!-- Firefly Theme Colors from Honkai Star Rail -->
     
-    <color name="accent">#5BC0BE</color>
-    <color name="accent_light">#7FD4D2</color>
+    <!-- Primary colors - Light greenish-gray like a firefly's glow -->
+    <color name="primary">#D8E5E0</color>              <!-- Very light mint gray -->
+    <color name="primary_dark">#B5C9C1</color>         <!-- Soft sage gray -->
+    <color name="primary_light">#ECF5F2</color>        <!-- Almost white mint -->
     
-    <!-- Background colors -->
-    <color name="background">#F5F5F5</color>
-    <color name="surface">#FFFFFF</color>
-    <color name="group_header_background">#EEEEEE</color>
+    <!-- Accent colors - Firefly glow (cyan/turquoise) -->
+    <color name="accent">#7FE8D3</color>               <!-- Bright firefly cyan -->
+    <color name="accent_light">#A8F2E1</color>         <!-- Soft glowing cyan -->
+    <color name="accent_dark">#4ECDB5</color>          <!-- Deep cyan -->
+    
+    <!-- Secondary accent - Gold/yellow (firefly warmth) -->
+    <color name="gold_accent">#FFE89D</color>          <!-- Soft warm gold -->
+    <color name="gold_accent_light">#FFF3C4</color>    <!-- Very light gold -->
+    
+    <!-- Background colors - Soft grayish tones -->
+    <color name="background">#F0F3F2</color>           <!-- Light gray-mint -->
+    <color name="background_dark">#E8EDEB</color>      <!-- Medium gray-mint -->
+    <color name="surface">#F8FAFA</color>              <!-- Very light gray -->
+    <color name="surface_variant">#F2F6F5</color>      <!-- Light gray-mint -->
+    
+    <!-- Group header -->
+    <color name="group_header_background">#B5C9C1</color>  <!-- Darker sage gray for visibility -->
     
     <!-- Text colors -->
-    <color name="text_primary">#212121</color>
-    <color name="text_secondary">#757575</color>
+    <color name="text_primary">#2C4A42</color>         <!-- Dark teal (readable on light bg) -->
+    <color name="text_secondary">#6B8A7F</color>       <!-- Medium sage green -->
+    <color name="text_on_primary">#2C4A42</color>      <!-- Dark text on light primary bg -->
     
-    <!-- Other colors -->
+    <!-- Navy accent from ribbon -->
+    <color name="navy_accent">#3B4570</color>          <!-- Navy blue -->
+    <color name="navy_accent_dark">#2A3150</color>     <!-- Darker navy -->
+    
+    <!-- Utility colors -->
     <color name="black">#000000</color>
     <color name="white">#FFFFFF</color>
     <color name="transparent">#00000000</color>
-    <color name="semi_transparent_black">#AA000000</color>
+    <color name="semi_transparent_black">#CC000000</color>      <!-- Darker overlay -->
+    <color name="semi_transparent_white">#99FFFFFF</color>      <!-- Light overlay -->
+    <color name="overlay_gradient_start">#00000000</color>
+    <color name="overlay_gradient_end">#E6000000</color>        <!-- Softer gradient -->
+    
+    <!-- Video card colors -->
+    <color name="card_background">#F8FAFA</color>
+    <color name="card_shadow">#1A000000</color>
 </resources>

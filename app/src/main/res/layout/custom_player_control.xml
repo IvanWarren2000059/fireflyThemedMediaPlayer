@@ -1,15 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="bottom">
+    android:layout_height="match_parent">
 
+    <!-- Gradient overlay for better control visibility -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="bottom">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:background="@drawable/player_controls_gradient" />
+
+    </LinearLayout>
+
+    <!-- Controls container -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="@drawable/player_controls_background"
+        android:layout_gravity="bottom"
         android:padding="16dp">
 
         <!-- Time and seek bar -->
@@ -17,29 +31,45 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:paddingBottom="12dp">
 
             <TextView
                 android:id="@id/exo_position"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/white"
-                android:textSize="14sp"
+                android:textColor="@color/white"
+                android:textSize="13sp"
+                android:fontFamily="sans-serif-medium"
+                android:minWidth="48dp"
+                android:gravity="center"
                 android:includeFontPadding="false" />
 
             <androidx.media3.ui.DefaultTimeBar
                 android:id="@id/exo_progress"
                 android:layout_width="0dp"
-                android:layout_height="26dp"
+                android:layout_height="30dp"
                 android:layout_weight="1"
-                android:layout_marginHorizontal="8dp" />
+                android:layout_marginHorizontal="12dp"
+                app:played_color="@color/accent"
+                app:scrubber_color="@color/accent"
+                app:buffered_color="@color/accent_light"
+                app:unplayed_color="@color/semi_transparent_white"
+                app:bar_height="3dp"
+                app:touch_target_height="26dp"
+                app:scrubber_enabled_size="14dp"
+                app:scrubber_disabled_size="0dp"
+                app:scrubber_dragged_size="18dp" />
 
             <TextView
                 android:id="@id/exo_duration"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/white"
-                android:textSize="14sp"
+                android:textColor="@color/white"
+                android:textSize="13sp"
+                android:fontFamily="sans-serif-medium"
+                android:minWidth="48dp"
+                android:gravity="center"
                 android:includeFontPadding="false" />
 
         </LinearLayout>
@@ -49,39 +79,45 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="center"
-            android:layout_marginTop="8dp">
+            android:gravity="center">
 
+            <!-- Rewind button -->
             <ImageButton
                 android:id="@id/exo_rew"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_margin="4dp"
-                android:src="@drawable/exo_ic_rewind"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="@string/rewind"
-                android:tint="@android:color/white" />
-
-            <ImageButton
-                android:id="@id/exo_play_pause"
+                style="@style/ExoStyledControls.Button.Center.Previous"
                 android:layout_width="56dp"
                 android:layout_height="56dp"
-                android:layout_margin="4dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
+                android:padding="12dp"
+                android:background="@drawable/player_button_background"
+                android:contentDescription="@string/rewind"
+                android:src="@drawable/ic_rewind_10"
+                app:tint="@color/white" />
+
+            <!-- Play/Pause button with accent background -->
+            <ImageButton
+                android:id="@id/exo_play_pause"
+                style="@style/ExoStyledControls.Button.Center.PlayPause"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_marginHorizontal="24dp"
+                android:padding="14dp"
+                android:background="@drawable/player_button_accent"
                 android:contentDescription="@string/play_pause" />
 
+            <!-- Forward button -->
             <ImageButton
                 android:id="@id/exo_ffwd"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_margin="4dp"
-                android:src="@drawable/exo_ic_forward"
-                android:background="?attr/selectableItemBackgroundBorderless"
+                style="@style/ExoStyledControls.Button.Center.Next"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:padding="12dp"
+                android:background="@drawable/player_button_background"
                 android:contentDescription="@string/forward"
-                android:tint="@android:color/white" />
+                android:src="@drawable/ic_forward_10"
+                app:tint="@color/white" />
 
         </LinearLayout>
 
     </LinearLayout>
 
-</LinearLayout>
+</FrameLayout>

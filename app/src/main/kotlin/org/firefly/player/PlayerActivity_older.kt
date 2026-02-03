@@ -26,7 +26,7 @@ import org.firefly.player.databinding.ActivityPlayerBinding
 import org.firefly.player.model.Video
 import androidx.media3.ui.PlayerView
 
-class PlayerActivity : AppCompatActivity() {
+class PlayerActivity_older : AppCompatActivity() {
 
     companion object {
         const val EXTRA_VIDEO = "extra_video"

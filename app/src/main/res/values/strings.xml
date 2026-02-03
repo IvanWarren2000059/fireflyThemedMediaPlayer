@@ -5,14 +5,16 @@
     <!-- Menu items -->
     <string name="search">Search</string>
     <string name="sort">Sort</string>
+    <string name="order">Order</string>
     <string name="group">Group</string>
     <string name="refresh">Refresh</string>
     
     <!-- Content descriptions -->
     <string name="video_thumbnail">Video thumbnail</string>
     <string name="play_pause">Play/Pause</string>
-    <string name="rewind">Rewind</string>
-    <string name="forward">Forward</string>
+    <string name="rewind">Rewind 10 seconds</string>
+    <string name="forward">Forward 10 seconds</string>
+    <string name="minimize">Minimize player</string>
     
     <!-- Messages -->
     <string name="no_videos">No videos</string>

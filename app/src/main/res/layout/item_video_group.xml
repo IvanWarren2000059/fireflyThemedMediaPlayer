@@ -3,25 +3,27 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:paddingVertical="8dp">
+    android:paddingBottom="8dp">
 
+    <!-- Group Header with darker background and text -->
     <TextView
         android:id="@+id/groupHeader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Group Header"
-        android:textSize="16sp"
-        android:textColor="@color/primary"
+        android:background="@color/primary_dark"
+        android:padding="12dp"
+        android:text="Group Name"
+        android:textColor="@color/text_primary"
+        android:textSize="14sp"
         android:fontFamily="sans-serif-medium"
-        android:paddingHorizontal="16dp"
-        android:paddingVertical="12dp"
-        android:background="@color/group_header_background" />
+        android:elevation="1dp" />
 
+    <!-- RecyclerView for videos in this group -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/groupRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:nestedScrollingEnabled="false"
-        android:padding="8dp" />
+        android:paddingTop="4dp"
+        android:clipToPadding="false" />
 
 </LinearLayout>
