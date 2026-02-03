@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Primary colors inspired by the character -->
+    <color name="primary">#4A4458</color>
+    <color name="primary_dark">#2F2838</color>
+    <color name="primary_light">#6B5D7A</color>
+    
+    <color name="accent">#5BC0BE</color>
+    <color name="accent_light">#7FD4D2</color>
+    
+    <!-- Background colors -->
+    <color name="background">#F5F5F5</color>
+    <color name="surface">#FFFFFF</color>
+    <color name="group_header_background">#EEEEEE</color>
+    
+    <!-- Text colors -->
+    <color name="text_primary">#212121</color>
+    <color name="text_secondary">#757575</color>
+    
+    <!-- Other colors -->
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
+    <color name="transparent">#00000000</color>
+    <color name="semi_transparent_black">#AA000000</color>
+</resources>

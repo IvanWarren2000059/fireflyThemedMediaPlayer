@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Firefly Player</string>
+    
+    <!-- Menu items -->
+    <string name="search">Search</string>
+    <string name="sort">Sort</string>
+    <string name="group">Group</string>
+    <string name="refresh">Refresh</string>
+    
+    <!-- Content descriptions -->
+    <string name="video_thumbnail">Video thumbnail</string>
+    <string name="play_pause">Play/Pause</string>
+    <string name="rewind">Rewind</string>
+    <string name="forward">Forward</string>
+    
+    <!-- Messages -->
+    <string name="no_videos">No videos</string>
+    <string name="no_videos_found">No videos found</string>
+    <string name="loading">Loading videos…</string>
+    <string name="permission_required">Storage permission is required to access videos</string>
+    
+    <!-- Player -->
+    <string name="player_title">Video Player</string>
+</resources>
