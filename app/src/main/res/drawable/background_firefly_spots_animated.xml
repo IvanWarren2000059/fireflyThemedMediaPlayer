@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- background_firefly_spots_animated.xml -->
+<!-- 5 frames - Fireflies move around and pulse -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    
+    <!-- Base gray background -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/background" />
+        </shape>
+    </item>
+    
+    <!-- Animated firefly spots - MOVING VERSION -->
+    <item>
+        <animation-list android:oneshot="false">
+            <!-- Frame 1 -->
+            <item android:duration="400">
+                <bitmap
+                    android:src="@drawable/firefly_frame_1_moving"
+                    android:tileMode="repeat"
+                    android:alpha="0.85" />
+            </item>
+            
+            <!-- Frame 2 -->
+            <item android:duration="400">
+                <bitmap
+                    android:src="@drawable/firefly_frame_2_moving"
+                    android:tileMode="repeat"
+                    android:alpha="0.85" />
+            </item>
+            
+            <!-- Frame 3 -->
+            <item android:duration="400">
+                <bitmap
+                    android:src="@drawable/firefly_frame_3_moving"
+                    android:tileMode="repeat"
+                    android:alpha="0.85" />
+            </item>
+            
+            <!-- Frame 4 -->
+            <item android:duration="400">
+                <bitmap
+                    android:src="@drawable/firefly_frame_4_moving"
+                    android:tileMode="repeat"
+                    android:alpha="0.85" />
+            </item>
+            
+            <!-- Frame 5 -->
+            <item android:duration="400">
+                <bitmap
+                    android:src="@drawable/firefly_frame_5_moving"
+                    android:tileMode="repeat"
+                    android:alpha="0.85" />
+            </item>
+        </animation-list>
+    </item>
+    
+</layer-list>

@@ -16,14 +16,15 @@
     <color name="gold_accent">#FFE89D</color>          <!-- Soft warm gold -->
     <color name="gold_accent_light">#FFF3C4</color>    <!-- Very light gold -->
     
-    <!-- Background colors - Soft grayish tones -->
-    <color name="background">#F0F3F2</color>           <!-- Light gray-mint -->
-    <color name="background_dark">#E8EDEB</color>      <!-- Medium gray-mint -->
-    <color name="surface">#F8FAFA</color>              <!-- Very light gray -->
-    <color name="surface_variant">#F2F6F5</color>      <!-- Light gray-mint -->
+    <!-- Background colors - More grayish tones -->
+    <color name="background">#E8ECEA</color>           <!-- More gray background -->
+    <color name="background_dark">#D5DFDC</color>      <!-- Darker gray-mint -->
+    <color name="surface">#F2F5F4</color>              <!-- Slightly gray surface -->
+    <color name="surface_variant">#E8EDEB</color>      <!-- Gray-mint variant -->
     
-    <!-- Group header -->
-    <color name="group_header_background">#B5C9C1</color>  <!-- Darker sage gray for visibility -->
+    <!-- Group header - Light green like top bar -->
+    <color name="group_header_background">#C8E0D8</color>  <!-- Light green matching toolbar -->
+    <color name="group_header_text">#2C4A42</color>        <!-- Dark text for contrast -->
     
     <!-- Text colors -->
     <color name="text_primary">#2C4A42</color>         <!-- Dark teal (readable on light bg) -->
@@ -44,6 +45,9 @@
     <color name="overlay_gradient_end">#E6000000</color>        <!-- Softer gradient -->
     
     <!-- Video card colors -->
-    <color name="card_background">#F8FAFA</color>
+    <color name="card_background">#FFFFFF</color>              <!-- White cards on gray bg -->
     <color name="card_shadow">#1A000000</color>
+    
+    <!-- Divider -->
+    <color name="divider">#C8E0D8</color>                      <!-- Light green divider -->
 </resources>

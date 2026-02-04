@@ -2,9 +2,10 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout 
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rootLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background">
+    android:background="@drawable/background_firefly_spots_animated">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -19,6 +20,17 @@
             android:background="@color/primary"
             app:titleTextColor="@color/text_on_primary"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+        <!-- Divider line below toolbar -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/divider" />
+
+  <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/accent" />
 
     </com.google.android.material.appbar.AppBarLayout>
 

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    
+    <!-- Base gray background -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/background" />
+        </shape>
+    </item>
+    
+    <!-- Firefly spots pattern - MUCH MORE VISIBLE -->
+    <item>
+        <bitmap
+            android:src="@drawable/firefly_spots_pattern"
+            android:tileMode="repeat"
+            android:alpha="0.6" />
+    </item>
+    
+</layer-list>

@@ -26,6 +26,8 @@ import org.firefly.player.adapter.VideoAdapter
 import org.firefly.player.databinding.ActivityMainBinding
 import org.firefly.player.model.Video
 import org.firefly.player.viewmodel.VideoViewModel
+import android.graphics.drawable.AnimationDrawable
+import android.graphics.drawable.LayerDrawable
 
 class MainActivity : AppCompatActivity() {
 
@@ -34,6 +36,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var videoAdapter: VideoAdapter
     private lateinit var groupedAdapter: GroupedVideoAdapter
     private var isGrouped = false
+    private var searchView: SearchView? = null
 
     private val permissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -54,11 +57,26 @@ class MainActivity : AppCompatActivity() {
         setupViewModel()
         setupRecyclerView()
         checkPermissionsAndLoadVideos()
-    }
+        startFireflyAnimation()
 
+     
+    }
+   private fun startFireflyAnimation() {
+    val rootLayout = findViewById<androidx.coordinatorlayout.widget.CoordinatorLayout>(R.id.rootLayout)
+    val background = rootLayout.background
+    
+    // The background is a LayerDrawable, we need to get the second layer (index 1)
+    if (background is LayerDrawable && background.numberOfLayers > 1) {
+        val fireflyLayer = background.getDrawable(1) // Index 1 is the firefly animation layer
+        if (fireflyLayer is AnimationDrawable) {
+            fireflyLayer.start()
+        }
+    }
+}
     private fun setupActionBar() {
         setSupportActionBar(binding.toolbar)
-        supportActionBar?.title = "Firefly Player"
+        // NO title - just the toolbar with icons
+        supportActionBar?.setDisplayShowTitleEnabled(false)
     }
 
     private fun setupViewModel() {
@@ -166,15 +184,55 @@ class MainActivity : AppCompatActivity() {
         menuInflater.inflate(R.menu.menu_main, menu)
 
         val searchItem = menu.findItem(R.id.action_search)
-        val searchView = searchItem.actionView as SearchView
+        searchView = searchItem.actionView as SearchView
 
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+        // Listen for when SearchView is closed (back button clicked)
+        searchItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
+            override fun onMenuItemActionExpand(item: MenuItem): Boolean {
+                return true // Allow expansion
+            }
+
+            override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
+                // When search is collapsed, restore the original state
+                val currentGroupType = viewModel.getCurrentGroupType()
+                
+                if (currentGroupType != VideoViewModel.GroupType.NONE && !isGrouped) {
+                    // Restore grouped view
+                    isGrouped = true
+                    binding.recyclerView.layoutManager = LinearLayoutManager(this@MainActivity)
+                    binding.recyclerView.adapter = groupedAdapter
+                } else if (currentGroupType == VideoViewModel.GroupType.NONE && isGrouped) {
+                    // Restore ungrouped view
+                    isGrouped = false
+                    binding.recyclerView.layoutManager = GridLayoutManager(this@MainActivity, 2)
+                    binding.recyclerView.adapter = videoAdapter
+                }
+                
+                // Trigger reload to show all videos
+                viewModel.searchVideos("")
+                return true // Allow collapse
+            }
+        })
+
+        searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return false
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                viewModel.searchVideos(newText ?: "")
+                if (newText.isNullOrEmpty()) {
+                    // When search text is cleared but SearchView is still open
+                    viewModel.searchVideos("")
+                } else {
+                    // When searching, force ungrouped view
+                    if (isGrouped) {
+                        isGrouped = false
+                        binding.recyclerView.layoutManager = GridLayoutManager(this@MainActivity, 2)
+                        binding.recyclerView.adapter = videoAdapter
+                    }
+                    viewModel.searchVideos(newText)
+                }
+                
                 return true
             }
         })
@@ -185,14 +243,20 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_group -> {
+                searchView?.setQuery("", false)
+                searchView?.isIconified = true
                 showSortGroupDialog()
                 true
             }
             R.id.action_order -> {
+                searchView?.setQuery("", false)
+                searchView?.isIconified = true
                 showSortGroupDialog()
                 true
             }
             R.id.action_refresh -> {
+                searchView?.setQuery("", false)
+                searchView?.isIconified = true
                 loadVideos()
                 true
             }
@@ -205,6 +269,8 @@ class MainActivity : AppCompatActivity() {
         
         val groupByRadioGroup = dialogView.findViewById<RadioGroup>(R.id.groupByRadioGroup)
         val sortByRadioGroup = dialogView.findViewById<RadioGroup>(R.id.sortByRadioGroup)
+        val sortAscending = dialogView.findViewById<RadioButton>(R.id.sortByName)
+        val sortDescending = dialogView.findViewById<RadioButton>(R.id.sortByDate)
         val btnCancel = dialogView.findViewById<MaterialButton>(R.id.btnCancel)
         val btnApply = dialogView.findViewById<MaterialButton>(R.id.btnApply)
         
@@ -217,11 +283,52 @@ class MainActivity : AppCompatActivity() {
             VideoViewModel.GroupType.NONE -> dialogView.findViewById<RadioButton>(R.id.groupByNone).isChecked = true
             VideoViewModel.GroupType.NAME -> dialogView.findViewById<RadioButton>(R.id.groupByFolder).isChecked = true
             VideoViewModel.GroupType.DATE -> dialogView.findViewById<RadioButton>(R.id.groupByDate).isChecked = true
-            VideoViewModel.GroupType.SIZE -> dialogView.findViewById<RadioButton>(R.id.groupByDate).isChecked = true
+            VideoViewModel.GroupType.SIZE -> dialogView.findViewById<RadioButton>(R.id.groupBySize).isChecked = true
         }
         
-        // Set sort by selection (default to Name A-Z)
-        dialogView.findViewById<RadioButton>(R.id.sortByName).isChecked = true
+        // Set sort by selection
+        if (currentOrder) {
+            sortAscending.isChecked = true
+        } else {
+            sortDescending.isChecked = true
+        }
+        
+        // Function to update sort radio button text based on selected group
+        val updateSortText: (VideoViewModel.GroupType) -> Unit = { groupType ->
+            when (groupType) {
+                VideoViewModel.GroupType.NONE -> {
+                    sortAscending.text = "Ascending (A→Z, Old→New, Small→Large)"
+                    sortDescending.text = "Descending (Z→A, New→Old, Large→Small)"
+                }
+                VideoViewModel.GroupType.NAME -> {
+                    sortAscending.text = "A-Z within each folder"
+                    sortDescending.text = "Z-A within each folder"
+                }
+                VideoViewModel.GroupType.DATE -> {
+                    sortAscending.text = "Oldest first within each month"
+                    sortDescending.text = "Newest first within each month"
+                }
+                VideoViewModel.GroupType.SIZE -> {
+                    sortAscending.text = "Smallest first within each range"
+                    sortDescending.text = "Largest first within each range"
+                }
+            }
+        }
+        
+        // Set initial sort text
+        updateSortText(currentGroupType)
+        
+        // Update sort text when group selection changes
+        groupByRadioGroup.setOnCheckedChangeListener { _, checkedId ->
+            val groupType = when (checkedId) {
+                R.id.groupByNone -> VideoViewModel.GroupType.NONE
+                R.id.groupByFolder -> VideoViewModel.GroupType.NAME
+                R.id.groupByDate -> VideoViewModel.GroupType.DATE
+                R.id.groupBySize -> VideoViewModel.GroupType.SIZE
+                else -> VideoViewModel.GroupType.NONE
+            }
+            updateSortText(groupType)
+        }
         
         val dialog = AlertDialog.Builder(this)
             .setView(dialogView)
@@ -242,30 +349,45 @@ class MainActivity : AppCompatActivity() {
                 R.id.groupByNone -> VideoViewModel.GroupType.NONE
                 R.id.groupByFolder -> VideoViewModel.GroupType.NAME
                 R.id.groupByDate -> VideoViewModel.GroupType.DATE
+                R.id.groupBySize -> VideoViewModel.GroupType.SIZE
                 else -> VideoViewModel.GroupType.NONE
             }
             
-            // Determine sort order (ascending = true)
-            val ascending = when (selectedSortId) {
-                R.id.sortByName -> true
-                R.id.sortByDate -> false  // Newest first
-                R.id.sortBySize -> false  // Largest first
-                R.id.sortByDuration -> false
-                else -> true
-            }
+            // Determine sort order (ascending = true, descending = false)
+            val ascending = selectedSortId == R.id.sortByName
             
-            // Apply grouping
-            if (groupType == VideoViewModel.GroupType.NONE) {
-                // No grouping - grid layout
-                isGrouped = false
-                binding.recyclerView.layoutManager = GridLayoutManager(this, 2)
-                binding.recyclerView.adapter = videoAdapter
-                viewModel.groupBy(VideoViewModel.GroupType.NONE)
+            val currentGroupType = viewModel.getCurrentGroupType()
+            val isChangingGroupType = currentGroupType != groupType
+            
+            // Only fade when changing between grouped/ungrouped or changing group type
+            if (isChangingGroupType) {
+                // Smooth fade animation
+                binding.recyclerView.animate()
+                    .alpha(0f)
+                    .setDuration(200)
+                    .withEndAction {
+                        // Apply grouping
+                        if (groupType == VideoViewModel.GroupType.NONE) {
+                            isGrouped = false
+                            binding.recyclerView.layoutManager = GridLayoutManager(this, 2)
+                            binding.recyclerView.adapter = videoAdapter
+                            viewModel.groupBy(VideoViewModel.GroupType.NONE)
+                        } else {
+                            isGrouped = true
+                            binding.recyclerView.layoutManager = LinearLayoutManager(this)
+                            binding.recyclerView.adapter = groupedAdapter
+                            viewModel.groupBy(groupType, ascending)
+                        }
+                        
+                        // Fade back in
+                        binding.recyclerView.animate()
+                            .alpha(1f)
+                            .setDuration(200)
+                            .start()
+                    }
+                    .start()
             } else {
-                // Grouped - linear layout
-                isGrouped = true
-                binding.recyclerView.layoutManager = LinearLayoutManager(this)
-                binding.recyclerView.adapter = groupedAdapter
+                // Just changing sort order - smooth rearrangement (no fade)
                 viewModel.groupBy(groupType, ascending)
             }
             

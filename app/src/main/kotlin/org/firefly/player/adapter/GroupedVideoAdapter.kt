@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import org.firefly.player.R
 import org.firefly.player.model.Video
@@ -16,7 +16,6 @@ class GroupedVideoAdapter(
     private var groups: List<Pair<String, List<Video>>> = emptyList()
 
     fun submitGroups(groupedVideos: Map<String, List<Video>>) {
-        // Preserve the order from the Map - it's already sorted correctly in VideoRepository
         groups = groupedVideos.toList()
         notifyDataSetChanged()
     }
@@ -43,8 +42,11 @@ class GroupedVideoAdapter(
         private val adapter = VideoAdapter(onVideoClick)
         
         init {
-            recyclerView.layoutManager = LinearLayoutManager(itemView.context)
+            // Use GRID layout with 2 columns - same as ungrouped view!
+            recyclerView.layoutManager = GridLayoutManager(itemView.context, 2)
             recyclerView.adapter = adapter
+            // Disable nested scrolling for better performance
+            recyclerView.isNestedScrollingEnabled = false
         }
         
         fun bind(group: Pair<String, List<Video>>) {

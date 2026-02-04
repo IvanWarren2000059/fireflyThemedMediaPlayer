@@ -16,10 +16,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="@color/card_background">
+        android:orientation="vertical">
 
-        <!-- Thumbnail area with placeholder -->
+        <!-- Smaller thumbnail area with placeholder -->
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="85dp"
@@ -30,9 +29,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
+                android:background="@color/surface_variant"
                 android:contentDescription="@string/video_thumbnail" />
 
-            <!-- Gradient overlay - lighter -->
+            <!-- Gradient overlay -->
             <View
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
@@ -57,12 +57,13 @@
 
         </FrameLayout>
 
-        <!-- Info section - no extra background -->
+        <!-- Compact info section -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="8dp">
+            android:padding="8dp"
+            android:background="@color/card_background">
 
             <TextView
                 android:id="@+id/videoTitle"

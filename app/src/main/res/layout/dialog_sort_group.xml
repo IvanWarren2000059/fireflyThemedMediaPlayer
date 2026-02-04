@@ -4,181 +4,195 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:background="@color/surface"
-    android:padding="20dp">
+    android:background="@drawable/firefly_dialog_background"
+    android:padding="0dp">
 
-    <!-- Dialog Title -->
-    <TextView
-        android:id="@+id/dialogTitle"
+    <!-- Dialog Header -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Sort &amp; Group"
-        android:textSize="20sp"
-        android:textColor="@color/text_primary"
-        android:fontFamily="sans-serif-medium"
-        android:gravity="center"
-        android:paddingBottom="16dp" />
+        android:background="@drawable/dialog_header_background"
+        android:orientation="horizontal"
+        android:padding="20dp"
+        android:gravity="center_vertical">
 
-    <!-- Options Container -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/dialogTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sort &amp; Group"
+                android:textSize="22sp"
+                android:textColor="@color/text_primary"
+                android:fontFamily="sans-serif-medium" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Organize your videos"
+                android:textSize="13sp"
+                android:textColor="@color/text_secondary"
+                android:layout_marginTop="4dp" />
+
+        </LinearLayout>
+
+        <!-- BIGGER Firefly character in header -->
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/firefly_character"
+            android:scaleType="fitCenter"
+            android:layout_marginStart="12dp"
+            android:contentDescription="@string/firefly_character" />
+
+    </LinearLayout>
+
+    <!-- Content Container -->
     <LinearLayout
-        android:id="@+id/optionsContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="@drawable/dialog_options_background"
-        android:padding="16dp">
+        android:padding="20dp">
 
         <!-- Group By Section -->
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Group By"
-            android:textSize="14sp"
-            android:textColor="@color/accent_dark"
+            android:textSize="16sp"
+            android:textColor="@color/accent"
             android:fontFamily="sans-serif-medium"
-            android:paddingBottom="8dp" />
+            android:layout_marginBottom="12dp" />
 
         <RadioGroup
             android:id="@+id/groupByRadioGroup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="16dp">
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/dialog_options_background"
+            android:padding="8dp">
 
-            <RadioButton
+            <com.google.android.material.radiobutton.MaterialRadioButton
                 android:id="@+id/groupByNone"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="44dp"
                 android:text="None"
-                android:textSize="13sp"
+                android:textSize="14sp"
                 android:textColor="@color/text_primary"
-                android:buttonTint="@color/accent"
-                android:paddingVertical="6dp" />
+                app:buttonTint="@color/accent"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp" />
 
-            <RadioButton
+            <com.google.android.material.radiobutton.MaterialRadioButton
                 android:id="@+id/groupByFolder"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Folder"
-                android:textSize="13sp"
+                android:layout_height="44dp"
+                android:text="Folder (Name)"
+                android:textSize="14sp"
                 android:textColor="@color/text_primary"
-                android:buttonTint="@color/accent"
-                android:paddingVertical="6dp" />
+                app:buttonTint="@color/accent"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp" />
 
-            <RadioButton
+            <com.google.android.material.radiobutton.MaterialRadioButton
                 android:id="@+id/groupByDate"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Date"
-                android:textSize="13sp"
+                android:layout_height="44dp"
+                android:text="Date (Month/Year)"
+                android:textSize="14sp"
                 android:textColor="@color/text_primary"
-                android:buttonTint="@color/accent"
-                android:paddingVertical="6dp" />
+                app:buttonTint="@color/accent"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp" />
+
+            <com.google.android.material.radiobutton.MaterialRadioButton
+                android:id="@+id/groupBySize"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:text="Size Range"
+                android:textSize="14sp"
+                android:textColor="@color/text_primary"
+                app:buttonTint="@color/accent"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp" />
 
         </RadioGroup>
 
-        <!-- Sort By Section -->
+        <!-- Sort By Section - SIMPLIFIED TO JUST ASCENDING/DESCENDING -->
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Sort By"
-            android:textSize="14sp"
-            android:textColor="@color/accent_dark"
+            android:text="Sort Order"
+            android:textSize="16sp"
+            android:textColor="@color/accent"
             android:fontFamily="sans-serif-medium"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp" />
+            android:layout_marginBottom="12dp" />
 
         <RadioGroup
             android:id="@+id/sortByRadioGroup"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:background="@drawable/dialog_options_background"
+            android:padding="8dp">
 
-            <RadioButton
+            <!-- ASCENDING: Name A-Z, Date Oldest→Newest, Size Smallest→Largest -->
+            <com.google.android.material.radiobutton.MaterialRadioButton
                 android:id="@+id/sortByName"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Name"
-                android:textSize="13sp"
+                android:layout_height="44dp"
+                android:text="Ascending (A→Z, Old→New, Small→Large)"
+                android:textSize="14sp"
                 android:textColor="@color/text_primary"
-                android:buttonTint="@color/accent"
-                android:paddingVertical="6dp" />
+                app:buttonTint="@color/accent"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp" />
 
-            <RadioButton
+            <!-- DESCENDING: Name Z-A, Date Newest→Oldest, Size Largest→Smallest -->
+            <com.google.android.material.radiobutton.MaterialRadioButton
                 android:id="@+id/sortByDate"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Date"
-                android:textSize="13sp"
+                android:layout_height="44dp"
+                android:text="Descending (Z→A, New→Old, Large→Small)"
+                android:textSize="14sp"
                 android:textColor="@color/text_primary"
-                android:buttonTint="@color/accent"
-                android:paddingVertical="6dp" />
-
-            <RadioButton
-                android:id="@+id/sortBySize"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Size"
-                android:textSize="13sp"
-                android:textColor="@color/text_primary"
-                android:buttonTint="@color/accent"
-                android:paddingVertical="6dp" />
-
-            <RadioButton
-                android:id="@+id/sortByDuration"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Duration"
-                android:textSize="13sp"
-                android:textColor="@color/text_primary"
-                android:buttonTint="@color/accent"
-                android:paddingVertical="6dp" />
+                app:buttonTint="@color/accent"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp" />
 
         </RadioGroup>
 
-    </LinearLayout>
-
-    <!-- Firefly Character Decoration (bottom right) -->
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp">
-
-        <ImageView
-            android:id="@+id/fireflyCharacter"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_gravity="end"
-            android:src="@drawable/firefly_character"
-            android:scaleType="fitEnd"
-            android:alpha="0.9"
-            android:contentDescription="Firefly" />
-
-    </FrameLayout>
-
-    <!-- Action Buttons -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="end"
-        android:layout_marginTop="16dp">
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnCancel"
-            android:layout_width="wrap_content"
+        <!-- Action Buttons -->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Cancel"
-            android:textColor="@color/text_secondary"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
-            android:layout_marginEnd="8dp" />
+            android:orientation="horizontal"
+            android:gravity="end">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnApply"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Apply"
-            android:textColor="@color/white"
-            app:backgroundTint="@color/accent"
-            app:cornerRadius="12dp" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnCancel"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="CANCEL"
+                android:textColor="@color/text_secondary"
+                android:layout_marginEnd="12dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnApply"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="APPLY"
+                android:textColor="@color/white"
+                android:backgroundTint="@color/accent"
+                app:cornerRadius="12dp" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
